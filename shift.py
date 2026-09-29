@@ -11,7 +11,12 @@ def shift(o):
   o={k:shift(v) for k,v in o.items()}
   t=o.get('type')
   if set(o)=={'absolute'}: o['absolute']+=S
-  if t=='minecraft:y_clamped_gradient': o['from_y']+=S; o['to_y']+=S
+  if t=='minecraft:y_clamped_gradient':
+    o['from_y']+=S; o['to_y']+=S
+    # codec limits from_y/to_y to [-4064, 4062]; clip while keeping the same line
+    k=(o['to_value']-o['from_value'])/(o['to_y']-o['from_y'])
+    for y,v,lim in (('to_y','to_value',4062),('from_y','from_value',4062)):
+      if o[y]>lim: o[v]-=k*(o[y]-lim); o[y]=lim
   if t=='minecraft:noise' and o.get('y_scale',0):
     o={'type':'minecraft:shifted_noise','noise':o['noise'],'xz_scale':o['xz_scale'],'y_scale':o['y_scale'],
        'shift_x':0.0,'shift_y':-S*o['y_scale'],'shift_z':0.0}
