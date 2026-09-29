@@ -1,0 +1,7 @@
+{
+  "pack": {
+    "description": "Raises the Overworld bottom from y=-64 to y=0",
+    "min_format": [94, 1],
+    "max_format": [94, 1]
+  }
+}
