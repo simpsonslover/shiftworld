@@ -1,10 +1,13 @@
 # shiftworld
 ## Shiftworld data pack (Minecraft 1.21.11)
 
-Moves the Overworld floor from y=-64 to y=0 (build limit stays at y=320, bedrock at y=0–4).
+Shifts the whole Overworld up 64 blocks: bedrock at y=0, sea level at y=127, build limit y=384. Terrain, caves, ores, biomes (incl. deep dark), ancient cities and trial chambers keep the same shape relative to each other, just 64 blocks higher.
 
-**Install:** zip `pack.mcmeta` + `data/` (or drop this folder) into `<world>/datapacks/` **before** the world is first created — dimension height can't change safely in an existing world.
+**Install:** put `shiftworld.zip` in `<world>/datapacks/` **before** the world is first created.
 
-Files:
-- `data/minecraft/dimension_type/overworld.json` — `min_y: 0`, `height: 320`
-- `data/minecraft/worldgen/noise_settings/overworld.json` — noise range 0–320, bottom slide moved to y=0–24, ore veins start at y=0
+How it works: vanilla worldgen files are copied with every absolute Y value moved by +64 (dimension height, noise range, `y_clamped_gradient`s, 3D noises re-offset via `shifted_noise`, surface rules, ore/feature height ranges, carvers, ancient city / trial chamber start heights). Nether/End content is left untouched. Regenerate with `shift.py` against misode/mcmeta `1.21.11-data`.
+
+Known limits (hardcoded in the game, can't be fixed by a data pack):
+- Deep lava lakes/aquifers (vanilla lava below y=-54) become water.
+- Ocean monuments still spawn at the hardcoded y=39, so they end up buried under the raised ocean floor.
+- Some fine terrain/cave noise isn't Y-shiftable, so the world is equivalent but not block-for-block identical to a vanilla seed.
